@@ -5,7 +5,7 @@ import time
 import random
  
 snake_speed = 15
-snake_size = 20
+snake_size = 10
 fruit_size = 10
  
 # Window size
@@ -39,13 +39,21 @@ snake_body = [  [window_x//2, window_y//2],
 # getting random fruit positions
 fruit_position = [random.randrange(1, (window_x//10)) * 10,
                   random.randrange(1, (window_y//10)) * 10]
-fruit_spawn = True
+fruit_spawn = False
  
 # setting default snake direction towards right
 direction = 'RIGHT'
 change_to = direction
 
-# # Main Function
+# Function to determine if two blocks overlap
+def collision_detected(block_pos_1, block_pos_2):
+    
+    # Returns true if x,y coords overlap, otherwise false
+    return block_pos_1[0] == block_pos_2[0] and block_pos_1[1] == block_pos_2[1]
+        
+    
+
+# Main Function
 
 while True:
     
@@ -86,10 +94,20 @@ while True:
         snake_position[0] += snake_size
     
     # Insert the new snake position
+	# Snake body growing mechanism, if fruit and snake collide, add one to the body length
     snake_body.insert(0, list(snake_position))
+    if collision_detected(snake_position, fruit_position):
+        fruit_spawn = True
+    else:
+        # Remove the old snake position
+        snake_body.pop()
+        
+    # If a fruit was eaten, spawn a new fruit
+    if fruit_spawn:
+        fruit_position = [random.randrange(1, (window_x//10)) * 10,
+                          random.randrange(1, (window_y//10)) * 10]
     
-    # Remove the old snake position
-    snake_body.pop()
+    fruit_spawn = False 
     
     # Erase the old snake position from the screen
     game_window.fill(black)
@@ -98,6 +116,9 @@ while True:
     for pos in snake_body:
         pygame.draw.rect(game_window, green, 
                          pygame.Rect(pos[0], pos[1], snake_size, snake_size))
+        
+    pygame.draw.rect(game_window, white,
+                     pygame.Rect(fruit_position[0], fruit_position[1], fruit_size, fruit_size))
     
     # Refresh game screen
     pygame.display.update()
