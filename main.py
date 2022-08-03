@@ -5,6 +5,8 @@ import time
 import random
  
 snake_speed = 15
+snake_size = 10
+food_size = 10
  
 # Window size
 window_x = 720
