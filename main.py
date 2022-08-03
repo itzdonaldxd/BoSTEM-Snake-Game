@@ -50,7 +50,35 @@ def collision_detected(block_pos_1, block_pos_2):
     
     # Returns true if x,y coords overlap, otherwise false
     return block_pos_1[0] == block_pos_2[0] and block_pos_1[1] == block_pos_2[1]
-        
+
+
+# Game over function: Show text saying Game Over
+def game_over():
+    # Create font obj
+    my_font = pygame.font.SysFont('times new roman', 50)
+    
+	# creating a text surface on which text will be drawn
+    game_over_surface = my_font.render('Game Over', True, red)
+    
+	# create a rectangular object for the text surface object
+    game_over_rect = game_over_surface.get_rect()
+     
+    # setting position of the text
+    game_over_rect.midtop = (window_x//2, window_y//4)
+     
+    # blit will draw the text on screen
+    game_window.blit(game_over_surface, game_over_rect)
+    pygame.display.flip()
+     
+    # after 3 seconds we will quit the program
+    time.sleep(3)
+     
+    # deactivating pygame library
+    pygame.quit()
+     
+    # quit the program
+    quit()
+    
     
 
 # Main Function
@@ -119,6 +147,21 @@ while True:
         
     pygame.draw.rect(game_window, white,
                      pygame.Rect(fruit_position[0], fruit_position[1], fruit_size, fruit_size))
+    
+    # Game Over Conditions
+    
+    # If snake goes outside game window
+    if snake_position[0] < 0 or snake_position[0] > window_x-snake_size: # x boundaries
+        game_over()
+    if snake_position[1] < 0 or snake_position[1] > window_y-snake_size: # y boundaries
+        game_over()
+    
+    # If snake eats itself
+    for block in snake_body[1:]:
+        if collision_detected(snake_position, block):
+            game_over()
+    
+    
     
     # Refresh game screen
     pygame.display.update()
