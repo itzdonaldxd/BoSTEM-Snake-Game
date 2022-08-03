@@ -45,12 +45,15 @@ fruit_spawn = False
 direction = 'RIGHT'
 change_to = direction
 
+# score var to store how many fruits have been eaten
+score = 0
+fruit_score = 10
+
 # Function to determine if two blocks overlap
 def collision_detected(block_pos_1, block_pos_2):
     
     # Returns true if x,y coords overlap, otherwise false
     return block_pos_1[0] == block_pos_2[0] and block_pos_1[1] == block_pos_2[1]
-
 
 # Game over function: Show text saying Game Over
 def game_over():
@@ -78,7 +81,21 @@ def game_over():
      
     # quit the program
     quit()
-    
+
+# Show score function: Show the score at all times
+def show_score():
+       
+    # creating font object score_font
+    score_font = pygame.font.SysFont('times new roman', 25)
+     
+    # create the display surface object score_surface
+    score_surface = score_font.render('Score : ' + str(score), True, blue)
+     
+    # create a rectangular object for the text surface object
+    score_rect = score_surface.get_rect()
+     
+    # blit will draw the text on screen
+    game_window.blit(score_surface, score_rect)
     
 
 # Main Function
@@ -96,7 +113,6 @@ while True:
                 change_to = 'LEFT'
             if event.key == pygame.K_RIGHT:
                 change_to = 'RIGHT'
-            # print(change_to)
  
     # If two keys pressed simultaneously
     # we don't want snake to move into two directions
@@ -125,6 +141,7 @@ while True:
 	# Snake body growing mechanism, if fruit and snake collide, add one to the body length
     snake_body.insert(0, list(snake_position))
     if collision_detected(snake_position, fruit_position):
+        score += fruit_score
         fruit_spawn = True
     else:
         # Remove the old snake position
@@ -161,7 +178,7 @@ while True:
         if collision_detected(snake_position, block):
             game_over()
     
-    
+    show_score()
     
     # Refresh game screen
     pygame.display.update()
