@@ -60,7 +60,7 @@ while True:
                 change_to = 'LEFT'
             if event.key == pygame.K_RIGHT:
                 change_to = 'RIGHT'
-            # print(change_to)
+            print(change_to)
  
     # If two keys pressed simultaneously
     # we don't want snake to move into two directions
@@ -84,26 +84,6 @@ while True:
         snake_position[0] -= snake_size
     if direction == 'RIGHT':
         snake_position[0] += snake_size
-    
-    # Insert the new snake position
-    snake_body.insert(0, list(snake_position))
-    
-    # Remove the old snake position
-    snake_body.pop()
-    
-    # Erase the old snake position from the screen
-    game_window.fill(black)
- 
-	# Drawing the snake at the newest position
-    for pos in snake_body:
-        pygame.draw.rect(game_window, green, 
-                         pygame.Rect(pos[0], pos[1], snake_size, snake_size))
-    
-    # Refresh game screen
-    pygame.display.update()
-    
-    # Frame Per Second /Refresh Rate
-    fps.tick(snake_speed)
 
 
 
